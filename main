@@ -1,1 +1,44 @@
+#include <stdio.h>
 
+struct Diary {
+    char date[20];
+    char title[50];
+    char content[500];
+};
+
+void addEntry();
+void viewEntries();
+void searchEntry();
+
+int main() {
+    int choice;
+
+    while (1) {
+        printf("\n==== Personal Diary ====\n");
+        printf("1. Add New Entry\n");
+        printf("2. View All Entries\n");
+        printf("3. Search Entry by Date\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar(); 
+
+        switch (choice) {
+            case 1:
+                addEntry();
+                break;
+            case 2:
+                viewEntries();
+                break;
+            case 3:
+                searchEntry();
+                break;
+            case 4:
+                printf("\nThank you for using the Diary!\n");
+                exit(0);
+            default:
+                printf("Invalid choice. Try again!\n");
+        }
+    }
+    return 0;
+}
