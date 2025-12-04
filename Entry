@@ -1,0 +1,23 @@
+
+typedef struct {
+    char date[20];
+    char title[50];
+    char content[500];
+} Entry;
+
+void addEntry() {
+    Entry e;
+
+    printf("Enter date (DD-MM-YYYY): ");
+    fgets(e.date, sizeof(e.date), stdin);
+    e.date[strcspn(e.date, "\n")] = '\0';  
+
+    printf("Enter title: ");
+    fgets(e.title, sizeof(e.title), stdin);
+    e.title[strcspn(e.title, "\n")] = '\0';
+
+    printf("Write your content below (type END to finish):\n");
+  
+     
+    printf("\nYour entry has been saved!\n");
+}
