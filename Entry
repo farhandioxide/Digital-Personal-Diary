@@ -17,14 +17,21 @@ void addEntry() {
     e.title[strcspn(e.title, "\n")] = '\0';
 
     printf("Write your content below (type END to finish):\n");
-  
-     
+    readMultilines(e.content, sizeof(e.content));
+
+     FILE *fp = fopen(DIARY_FILE, "ab");\\RECHECK
+    if (!fp) {
+        printf("Error saving entry.\n");
+        return;
+    }
+    fwrite(&e, sizeof(Entry), 1, fp);  \\RECHECK
+
     printf("\nYour entry has been saved!\n");
 }
 
 void clearInput(void) {
-    int rand;
-    while ((rand = getchar()) != '\n' && rand != EOF);
+    int ran;
+    while ((ran = getchar()) != '\n' && ran != EOF);
 }
 
 void readMultilines(char *buffer, int buffsize) {
@@ -46,3 +53,30 @@ void readMultilines(char *buffer, int buffsize) {
     }
 }
 
+void viewEntryByNumber(void) {
+    int num;
+    Entry e;
+
+    printf("Enter entry number: ");
+    scanf("%d", &num);
+    clearInput();
+
+    FILE *fp = fopen(DIARY_FILE, "rb");
+    if (!fp) {
+        printf("No entries.\n");
+        return;
+    }
+
+    int i = 0;
+    while (fread(&e, sizeof(Entry), 1, fp) == 1) {
+        if (++i == num) {
+            printf("\nDate: %s\nTitle: %s\nContent:\n%s\n",
+                   e.date, e.title, e.content);
+            fclose(fp);
+            return;
+        }
+    }
+
+    fclose(fp);
+    printf("No entry found at no. %d\n",num);
+}
