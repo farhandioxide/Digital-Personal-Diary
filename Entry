@@ -21,3 +21,28 @@ void addEntry() {
      
     printf("\nYour entry has been saved!\n");
 }
+
+void clearInput(void) {
+    int rand;
+    while ((rand = getchar()) != '\n' && rand != EOF);
+}
+
+void readMultilines(char *buffer, int buffsize) {
+    buffer[0] = '\0';
+    char line[500];
+
+    while (1) {
+        fgets(line, sizeof(line), stdin);
+
+        
+        if (strncmp(line, "END", 3) == 0)
+            break;
+
+    
+        if (((strlen(buffer) + strlen(line)) >= buffsize - 1))
+            break;
+
+        strcat(buffer, line);
+    }
+}
+
