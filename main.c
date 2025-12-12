@@ -357,3 +357,31 @@ void deleteEntry() {
     if (!found)
         printf("No entry found with that number.\n");
 }
+
+
+//pdf
+void exportEntries() {
+    char filename[50], exportFile[50];
+    sprintf(filename, "%s_diary.txt", currentUser);
+    sprintf(exportFile, "%s_export.txt", currentUser);
+
+    FILE *fp = fopen(filename, "r");
+    FILE *out = fopen(exportFile, "w");
+    char line[600];
+    int current = 0;
+
+    if (!fp || !out) {
+        printf("File error.\n");
+        return;
+    }
+
+    while (fgets(line, sizeof(line), fp)) {
+        if (strstr(line, "DATE:")) current++;
+        fprintf(out, "%s", line);
+    }
+
+    fclose(fp);
+    fclose(out);
+
+    printf("All entries exported to '%s'\n", exportFile);
+}
