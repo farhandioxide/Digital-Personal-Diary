@@ -3,7 +3,18 @@
 #include <string.h>
 #include <ctype.h>
 
+//colors
+#define RED      "\033[31m"
+#define GREEN    "\033[32m"
+#define YELLOW   "\033[33m"
+#define BLUE     "\033[34m"
+#define MAGENTA  "\033[35m"
+#define CYAN     "\033[36m"
+#define RESET    "\033[0m"
+
 #define USERFILE "user.txt"
+
+//func. prototypes [A]
 
 void signup();
 int login();
@@ -17,40 +28,42 @@ void clearInput() { while (getchar() != '\n'); }
 
 char currentUser[30];  
 
+// main func.
+
 int main() {
     int choice;
     char cchoice;
 
-    printf("=== Personal Diary Program ===\n");
+    printf(CYAN "=== Personal Diary Program ===\n" RESET);
 
-// sign up and login 
+    // Signup and Login 
     while (1) {
-        printf("\n1. Signup\n");
-        printf("2. Login\n");
-        printf("3. Exit\n");
-        printf("Choose: ");
+        printf(YELLOW "\n1. Signup\n" RESET);
+        printf(YELLOW "2. Login\n" RESET);
+        printf(YELLOW "3. Exit\n" RESET);
+        printf(MAGENTA "Choose: " RESET);
         scanf("%d", &choice);
         clearInput();
 
         if (choice == 1) signup();
         else if (choice == 2) {
             if (login()) break;
-            else printf("\nLogin failed. Try again.\n");
+            else printf(RED "\nLogin failed. Try again.\n" RESET);
         }
         else exit(0);
     }
 
- //diary menu
+    // MEnu after login 
     while (1) {
-        printf("\n=== Diary Menu ===\n");
-        printf("A. Add Entry\n");
-        printf("V. View Entries\n");
-        printf("S. Search Entry\n");
-        printf("E. Edit Entry\n");
-        printf("D. Delete Entry\n");
-        printf("X. Export Entries\n");
-        printf("Q. Quit\n");
-        printf("Choose: ");
+        printf(CYAN "\n=== Diary Menu ===\n" RESET);
+        printf(YELLOW "A. Add Entry\n" RESET);
+        printf(YELLOW "V. View Entries\n" RESET);
+        printf(YELLOW "S. Search Entry\n" RESET);
+        printf(YELLOW "E. Edit Entry\n" RESET);
+        printf(YELLOW "D. Delete Entry\n" RESET);
+        printf(YELLOW "X. Export Entries\n" RESET);
+        printf(YELLOW "Q. Quit\n" RESET);
+        printf(MAGENTA "Choose: " RESET);
         scanf(" %c", &cchoice);
         clearInput();
         cchoice = toupper(cchoice);
@@ -63,59 +76,57 @@ int main() {
             case 'D': deleteEntry(); break;
             case 'X': exportEntries(); break;
             case 'Q': exit(0);
-            default: printf("Invalid option.\n");
+            default: printf(RED "Invalid option.\n" RESET);
         }
     }
 
     return 0;
 }
 
-//functions
-
-//sign up
+//--------------------
+//func. definitions
+//sign up func [F]
 
 void signup() {
-    FILE *fp = fopen(USERFILE, "a");  
+    FILE *fp = fopen(USERFILE, "a");
     char user[30], pass[30];
 
     if (!fp) {
-        printf("Error creating user file.\n");
+        printf(RED "Error creating user file.\n" RESET);
         return;
     }
 
-    printf("\nCreate username: ");
-    getchar();
+    printf(MAGENTA "\nCreate username: " RESET);
     fgets(user, sizeof(user), stdin);
     user[strcspn(user, "\n")] = 0;
 
-    printf("Create password: ");
-    getchar();
+    printf(MAGENTA "Create password: " RESET);
     fgets(pass, sizeof(pass), stdin);
     pass[strcspn(pass, "\n")] = 0;
 
-    fprintf(fp, "%s %s\n", user, pass);  
+    fprintf(fp, "%s %s\n", user, pass);
     fclose(fp);
 
-    printf("Signup successful!\n");
+    printf(GREEN "Signup successful!\n" RESET);
 }
 
-// login 
+//login func.
 
 int login() {
     FILE *fp = fopen(USERFILE, "r");
     if (!fp) {
-        printf("No user registered. Please signup first.\n");
+        printf(RED "No user registered. Please signup first.\n" RESET);
         return 0;
     }
 
     char storedUser[30], storedPass[30];
     char user[30], pass[30];
 
-    printf("\nEnter username: ");
+    printf(MAGENTA "\nEnter username: " RESET);
     fgets(user, sizeof(user), stdin);
     user[strcspn(user, "\n")] = '\0';
 
-    printf("Enter password: ");
+    printf(MAGENTA "Enter password: " RESET);
     fgets(pass, sizeof(pass), stdin);
     pass[strcspn(pass, "\n")] = '\0';
 
@@ -123,7 +134,7 @@ int login() {
         if (strcmp(user, storedUser) == 0 && strcmp(pass, storedPass) == 0) {
             strcpy(currentUser, user);
             fclose(fp);
-            printf("\nLogin successful!\n");
+            printf(GREEN "\nLogin successful!\n" RESET);
             return 1;
         }
     }
@@ -132,28 +143,30 @@ int login() {
     return 0;
 }
 
-// entry 
+//---------------
+// ADD Entry func. [S]
+
 void addEntry() {
     char filename[50];
     sprintf(filename, "%s_diary.txt", currentUser);
 
     FILE *fp = fopen(filename, "a");
     if (!fp) {
-        printf("Error opening diary file.\n");
+        printf(RED "Error opening diary file.\n" RESET);
         return;
     }
 
     char date[20], title[50], content[500], line[200];
 
-    printf("\nEnter date (DD/MM/YYYY): ");
+    printf(MAGENTA "\nEnter date (DD/MM/YYYY): " RESET);
     fgets(date, sizeof(date), stdin);
     date[strcspn(date, "\n")] = 0;
 
-    printf("Enter title: ");
+    printf(MAGENTA "Enter title: " RESET);
     fgets(title, sizeof(title), stdin);
     title[strcspn(title, "\n")] = 0;
 
-    printf("Write content (end with a single line containing only ~):\n");
+    printf(MAGENTA "Write content (end with a single line containing only ~):\n" RESET);
 
     content[0] = '\0';
     while (1) {
@@ -162,11 +175,14 @@ void addEntry() {
         strcat(content, line);
     }
 
-    fprintf(fp, "DATE: %s\nTITLE: %s\nCONTENT:\n%s---\n", date, title, content);
+    fprintf(fp, "DATE: %s\nTITLE: %s\nCONTENT:\n%s---\n",
+            date, title, content);
     fclose(fp);
 
-    printf("Entry added.\n");
+    printf(GREEN "Entry added.\n" RESET);
 }
+
+//View Entry function
 
 void viewEntries() {
     char filename[50];
@@ -177,25 +193,27 @@ void viewEntries() {
     int current = 0;
 
     if (!fp) {
-        printf("No entries found.\n");
+        printf(RED "No entries found.\n" RESET);
         return;
     }
 
-    printf("\n=== All Entries ===\n\n");
+    printf(CYAN "\n=== All Entries ===\n\n" RESET);
 
     while (fgets(line, sizeof(line), fp)) {
         if (strstr(line, "DATE:")) {
             current++;
-            printf("\n=== Entry #%d ===\n", current);
+            printf(YELLOW "\n=== Entry #%d ===\n" RESET, current);
         }
         printf("%s", line);
     }
 
     if (current == 0)
-        printf("No entries available.\n");
+        printf(RED "No entries available.\n" RESET);
 
     fclose(fp);
 }
+
+// search Entry func.
 
 void searchEntry() {
     char filename[50];
@@ -206,11 +224,11 @@ void searchEntry() {
     int found = 0, target, current = 0;
 
     if (!fp) {
-        printf("No entries.\n");
+        printf(RED "No entries.\n" RESET);
         return;
     }
 
-    printf("Enter entry number to search: ");
+    printf(MAGENTA "Enter entry number to search: " RESET);
     scanf("%d", &target);
     clearInput();
 
@@ -219,7 +237,7 @@ void searchEntry() {
             current++;
             if (current == target) {
                 found = 1;
-                printf("\n=== Entry #%d ===\n", target);
+                printf(YELLOW "\n=== Entry #%d ===\n" RESET, target);
                 printf("%s", line);
                 while (fgets(line, sizeof(line), fp)) {
                     printf("%s", line);
@@ -231,10 +249,12 @@ void searchEntry() {
     }
 
     if (!found)
-        printf("No entry found with that number.\n");
+        printf(RED "No entry found with that number.\n" RESET);
 
     fclose(fp);
 }
+
+// Edit entry func.
 
 void editEntry() {
     char filename[50];
@@ -246,11 +266,11 @@ void editEntry() {
     int found = 0, target, current = 0;
 
     if (!fp || !temp) {
-        printf("File error.\n");
+        printf(RED "File error.\n" RESET);
         return;
     }
 
-    printf("Enter entry number to edit: ");
+    printf(MAGENTA "Enter entry number to edit: " RESET);
     scanf("%d", &target);
     clearInput();
 
@@ -264,11 +284,11 @@ void editEntry() {
                 strcpy(date, line + 6);
                 date[strcspn(date, "\n")] = 0;
 
-                printf("New title: ");
+                printf(MAGENTA "New title: " RESET);
                 fgets(newTitle, sizeof(newTitle), stdin);
                 newTitle[strcspn(newTitle, "\n")] = 0;
 
-                printf("New content (end with ~):\n");
+                printf(MAGENTA "New content (end with ~):\n" RESET);
                 newContent[0] = '\0';
                 char l[200];
                 while (1) {
@@ -277,7 +297,8 @@ void editEntry() {
                     strcat(newContent, l);
                 }
 
-                fprintf(temp, "DATE: %s\nTITLE: %s\nCONTENT:\n%s---\n",
+                fprintf(temp,
+                        "DATE: %s\nTITLE: %s\nCONTENT:\n%s---\n",
                         date, newTitle, newContent);
 
                 while (fgets(line, sizeof(line), fp))
@@ -296,10 +317,12 @@ void editEntry() {
     rename("temp.txt", filename);
 
     if (found)
-        printf("Entry #%d updated successfully.\n", target);
+        printf(GREEN "Entry updated successfully.\n" RESET);
     else
-        printf("No entry found with that number.\n");
+        printf(RED "No entry found with that number.\n" RESET);
 }
+
+//DELETE entry func.
 
 void deleteEntry() {
     char filename[50];
@@ -311,11 +334,11 @@ void deleteEntry() {
     int found = 0, target, current = 0;
 
     if (!fp || !temp) {
-        printf("File error.\n");
+        printf(RED "File error.\n" RESET);
         return;
     }
 
-    printf("Enter entry number to delete: ");
+    printf(MAGENTA "Enter entry number to delete: " RESET);
     scanf("%d", &target);
     clearInput();
 
@@ -324,21 +347,21 @@ void deleteEntry() {
             current++;
             if (current == target) {
                 found = 1;
-                printf("\n=== Entry #%d ===\n", target);
+
+                printf(YELLOW "\n=== Entry #%d ===\n" RESET, target);
                 printf("%s", line);
                 while (fgets(line, sizeof(line), fp)) {
                     printf("%s", line);
                     if (strstr(line, "---")) break;
                 }
 
-                
                 char confirm;
-                printf("Are you sure you want to delete this entry? (Y/N): ");
+                printf(RED "Are you sure you want to delete this entry? (Y/N): " RESET);
                 scanf(" %c", &confirm);
                 clearInput();
                 if (toupper(confirm) == 'Y') {
-                    printf("Entry deleted.\n");
-                    continue;  
+                    printf(GREEN "Entry deleted.\n" RESET);
+                    continue;
                 } else {
                     fseek(fp, -strlen(line), SEEK_CUR);
                     current--;
@@ -355,11 +378,12 @@ void deleteEntry() {
     rename("temp.txt", filename);
 
     if (!found)
-        printf("No entry found with that number.\n");
+        printf(RED "No entry found with that number.\n" RESET);
 }
 
+//-----------
+//Export Entry func. [f] 
 
-//pdf
 void exportEntries() {
     char filename[50], exportFile[50];
     sprintf(filename, "%s_diary.txt", currentUser);
@@ -371,7 +395,7 @@ void exportEntries() {
     int current = 0;
 
     if (!fp || !out) {
-        printf("File error.\n");
+        printf(RED "File error.\n" RESET);
         return;
     }
 
@@ -383,5 +407,7 @@ void exportEntries() {
     fclose(fp);
     fclose(out);
 
-    printf("All entries exported to '%s'\n", exportFile);
+    printf(GREEN "All entries exported to '%s'\n" RESET, exportFile);
 }
+
+//--------------
