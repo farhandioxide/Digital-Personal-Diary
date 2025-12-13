@@ -90,14 +90,6 @@ Your diary text...
 
 ---
 
-# ⚠️ Limitations
-
-* Passwords are stored in **plain text** (for learning purposes).
-* No encryption or hashing implemented.
-* Designed for **educational and practice use**.
-
----
-
 ##  Future Improvements
 
 *  Password hashing
