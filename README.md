@@ -1,11 +1,11 @@
-# 📔 Personal Diary Program (C)
+## 📔 Personal Diary Program (C)
 
 A **console-based personal diary application written in C**, featuring **user authentication**, **colored terminal UI**, and full **CRUD operations** for diary entries.
 Each user gets their own private diary stored locally using file handling.
 
 ---
 
-#  Features
+##  Features
 
 *  **User Authentication**
 
@@ -58,7 +58,7 @@ Each user gets their own private diary stored locally using file handling.
 ├── <username>_export.txt # Exported diary entries
 ```
 
-#  How It Works
+##  How It Works
 
 1. **Signup / Login**
 
@@ -82,7 +82,7 @@ Your diary text...
 
 ---
 
-#  Sample Actions
+##  Sample Actions
 
 * Add entries until you type `~` on a new line to finish content.
 * Edit or delete entries by selecting their entry number.
@@ -105,3 +105,11 @@ Your diary text...
 This project is open-source and available for educational use.
 
 ---
+
+## Contributors:
+Anika Tasnim Maisha. ID: 2534689042
+Sadat Bin Nasar.     ID: 2533769042
+Farhan Zaman.        ID: 2531094642
+
+---
+
